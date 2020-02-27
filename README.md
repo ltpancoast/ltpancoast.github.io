@@ -34,7 +34,10 @@ Overall, my experience with enhancing this artifact has been positive and succes
 Overall, my experience with enhancing this artifact has been again, positive and successful. I was able to improve my original artifact, and, complete my planned enhancement for this module. I’ve learned and improved my skills in several areas with this enhancement. For example, I have used the Vue JavaScript framework for implementing the scripting portion of my webpage as well as, the Axios framework for handling HTTP requests to and from the REST API. I’ve also improved my capabilities in terms of styling and rendering responsive web layouts using HTML5 and CSS3. In addition, and in response to problems caused by the same, I learned how to deal with and overcome cross-origin-resource-sharing.
 
 [Client Interface](img/client-interface/main.png)
+
 [Instant Search](img/client-interface/search.png)
+
 [Modal dialog](img/client-interface/update.png)
+
 [source files](source/) 
 
