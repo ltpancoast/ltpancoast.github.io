@@ -1,0 +1,388 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" type="text/css" href="../style/styles.css" />
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!--Vue.js template for modal window
+      courtesy of example from: https://vuejs.org/v2/examples/modal.html-->
+    <script type="text/x-template" id="modal-template">
+      <transition name="modal">
+        <div class="modal-mask">
+          <div class="modal-wrapper">
+            <div class="modal-container">
+
+              <div class="modal-header">
+                <slot name="header">
+                  default header
+                </slot>
+              </div>
+
+              <div class="modal-body">
+                <slot name="body">
+                  default body
+                </slot>
+              </div>
+
+              <div class="modal-footer">
+                <slot name="footer">
+                  Click OK when done
+                  <button class="modal-default-button" @click="$emit('close')">
+                    OK
+                  </button>
+                </slot>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </script>
+		<title>CS499 - Lee Pancoast</title>
+	</head>
+	<body>
+        <!--main application window -->
+      <div id="app" class="app-container">
+        <div class="app-main">
+          <div class="searchBar">
+            <span class="titles">Stock Filter: </span>
+                <!--input for filter list of stocks and button for creating new stock -->
+				    <input class="searchBox" type="text" v-model="query" placeholder="Enter symbol (e.g. AAPL)" />
+            <button v-on:click.prevent="showModal=true;add=true" class="action add">Add Stock</button>
+			    </div>
+          <table class="stockTable">
+				    <thead>
+					    <tr>
+						    <th>Ticker</th>
+						    <th>Company</th>
+						    <th>Actions</th>
+					    </tr>
+				    </thead>
+				    <tbody>
+              <!--dynamic table of stocks -->
+					    <tr v-for="stock in stockFilter">
+						    <td>{{stock.Ticker}}</td>
+						    <td>{{stock.Company}}</td>
+						    <td>
+							    <div role="group">
+								    <button v-bind:id="stock._id" v-on:click.prevent="stockInfo($event);showModal=true,info=true" class="action info">Info</button>
+								    <button v-bind:id="stock._id" v-on:click.prevent="stockInfo($event);showModal=true;edit=true" class="action update">Update</button>
+								    <button v-bind:id="stock._id" v-on:click="deleteStock($event)" class="action delete">Delete</button>
+							    </div>
+						    </td>
+					    </tr>
+				    </tbody>
+			    </table>
+        </div>
+        <!--displays the status of the HTTP requests -->
+        <div class="app-status">
+          <div class="me">
+            <h3>Lee Pancoast</h3>
+            <h4>CS499 Final Project</h4>
+          </div>
+          <div class="statsWrapper">
+          <table class="statusTable">
+            <tr>
+              <th>Number of stocks in list</th>
+            </tr>
+            <tr>
+              <td>{{stockCount}}</td>
+            </tr>
+            <tr>
+              <th>HTTP Response Code</th>
+            </tr>
+            <tr>
+              <td>{{httpCode}}</td>
+            </tr>
+            <tr>
+              <th>HTTP Response Text</th>
+            </tr>
+            <tr>
+              <td>{{httpStatus}}</td>
+            </tr>
+          </table>
+        </div>
+        </div>
+     <!--modal window for reading, updating, and creating stock info-->
+    <modal v-if="showModal" @close="resetStock();showModal=false;edit=false;add=false,info=false">
+      <h3 slot="header" v-cloak>{{stock.Ticker}}</h3>
+      <table class="table-modal" slot="body">
+       <thead>
+         <tr>
+           <th>Metric</th>
+           <th>Value</th>
+           <!--<th v-if="info">Value</th>
+           <th v-if="edit">Value</th>
+           <th v-if="add">Values</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(value,name) in stock">
+            <td>{{name}}</td>
+            <td v-if="info">{{value}}</td>
+            <td v-if="edit"><input v-model="stock[name]" type="text" v-bind:placeholder="value" v-bind:value="value"/></td>
+            <td v-if="add"><input v-model="stock[name]" type="text" v-bind:placeholder="value" v-bind:value="value"/></td>
+          </tr>
+        </tbody>
+       </table>
+       <div slot="footer" v-if="edit">
+        Click update to save changes
+        <button v-on:click="updateStock" class="modal-default-button">Update</button>
+       </div>
+       <div slot="footer" v-if="add">
+        Click create to add stock
+        <button v-on:click="createStock" class="modal-default-button">Create</button>
+        </div>
+       </modal>
+    </div>
+   <script>
+   //Vue.js
+   //
+   //modal template registration
+  Vue.component("modal", {
+    template: "#modal-template"
+  });
+     //base URI for HTTP requests
+  var soatURI = 'http://caramel-comrade-8080.codio.io/';
+  //vue instance
+	var vm1 = new Vue({
+			el: '#app',
+			data: {
+				query: "",
+				stocks: [],
+        showModal: false,
+        edit: false,
+        add: false,
+        info: false,
+        stock: {
+                'Forward P/E': 0,
+                '50-Day High': 0,
+                'Return on Equity':0,
+                'Current Ratio':0,
+                'Insider Transactions':0,
+                '20-Day Simple Moving Average':0,
+                'Relative Volume':0,
+                'Dividend Yield':0,
+                'Analyst Recom':0,
+                'EPS growth next year':0,
+                'P/S':0,
+                'Performance (Half Year)':0,
+                '52-Week Low':0,
+                'Insider Ownership':0,
+                'Float Short':0,
+                'Sales growth past 5 years':0,
+                'Market Cap':0,
+                'Shares Float':0,
+                'P/E':0,
+                'P/B':0,
+                'LT Debt/Equity':0,
+                'P/Cash':0,
+                'PEG':0,
+                '50-Day Low':0,
+                'Operating Margin':0,
+                'Price':0,
+                '200-Day Simple Moving Average':0,
+                'Performance (Month)':0,
+                'Gap':0,
+                'Volume':0,
+                'Beta':0,
+                'Payout Ratio':0,
+                'Sales growth quarter over quarter':0,
+                'Performance (Year)':0,
+                'Short Ratio':0,
+                'P/Free Cash Flow':0,
+                'Ticker':"",
+                'Change':0,
+                'Change from Open':0,
+                'Performance (Quarter)':0,
+                'Average Volume':0,
+                'Institutional Ownership':0,
+                'Country':0,
+                'Industry':0,
+                'Return on Assets':0,
+                'Performance (YTD)':0,
+                '52-Week High':0,
+                'Volatility (Week)':0,
+                'EPS growth this year':0,
+                'EPS (ttm)':0,
+                'EPS growth past 5 years':0,
+                '50-Day Simple Moving Average':0,
+                'Average True Range':0,
+                'Sector':0,
+                'Institutional Transactions':0,
+                'EPS growth next 5 years':0,
+                'Shares Outstanding':0,
+                'Quick Ratio':0,
+                'Total Debt/Equity':0,
+                'Return on Investment':0,
+                'Volatility (Month)':0,
+                'EPS growth quarter over quarter':0,
+                'Gross Margin':0,
+                'Profit Margin':0,
+                'Relative Strength Index (14)':0,
+                'Performance (Week)':0,
+                'Company':"",
+                '20-Day Simple Moving Average':0,
+                'Relative Volume':0,
+                'Dividend Yield':0,
+                'EPS growth next year':0,
+                'Performance (Half Year)':0,
+                '52-Week Low':0,
+                'Insider Ownership':0,
+                'Float Short':0,
+                'Sales growth past 5 years':0,
+                'Market Cap':0,
+                'Shares Float':0,
+                'LT Debt/Equity':0,
+                'PEG':0,
+                'Operating Margin':0,
+                'Price':0,
+                'Performance (Month)':0,
+                'Gap':0,
+                'Volume':0,
+                'Beta':0,
+                'Sales growth quarter over quarter':0,
+                'Performance (Year)':0,
+                'Short Ratio':0,
+                'P/Free Cash Flow':0,
+                'Average Volume':0,
+                'Industry':0,
+                'EPS growth this year':0,
+                'EPS (ttm)':0,
+                '50-Day Simple Moving Average':0,
+                'Average True Range':0,
+                'Institutional Transactions':0,
+                'EPS growth next 5 years':0,
+                'Return on Investment':0,
+                'Volatility (Month)':0,
+                'Gross Margin':0,
+                'Relative Strength Index (14)':0,
+                'Company':0,
+        },
+        httpCode:'',
+        httpStatus:'',
+        stockCount:'',
+			},
+			computed: {
+        //filters the table of stocks based on user input
+			  stockFilter: function(){
+				  var stocksList = this.stocks,
+							query = this.query;
+					if(!query){
+					  return stocksList;
+					}
+					query = query.trim().toLowerCase();
+					stocksList = stocksList.filter(function(item){
+					  if(item.Ticker.toLowerCase().indexOf(query) !== -1){
+						  return item;
+						}
+					})
+					return stocksList;;
+				},
+      },
+      methods: {
+        //ObjectId is used for DB operations to ensure a level of uniqueness
+        //requests the document containing the associated ObjectId from the MongoDB
+        stockInfo: function (event){
+          var vm = this,
+              uri = soatURI + 'find';
+          //the actual HTTP request
+          axios
+            .get(uri, {headers:{'Content-Type':'application/json'}, params: {'id':event.currentTarget.id}})
+            .then(function(response) {
+              vm.getStats(response);                    //captures http status (normal or error)
+              for (const i in response.data){
+                vm1.$set(vm.stock,i,response.data[i]);
+              }
+            })
+            .catch(function(error){
+               vm.getStats(error.response);
+            });
+            vm.info = false;
+        },
+        //deletes a stock from DB
+        deleteStock: function(event){
+            var vm = this,
+                uri = soatURI + 'delete';
+          axios
+            .get(uri, {headers:{'Content-Type':'application/json'}, params: {'id':event.currentTarget.id}})
+            .then(function(response){
+               vm.getStats(response);
+            })
+            .catch(function(error){
+               vm.getStats(error.response);
+            })
+            vm.listStocks();
+            vm.query = "";
+        },
+        //updates the current stock
+        updateStock: function(){
+          var vm = this,
+              uri = soatURI + 'update';
+           axios
+             .get(uri,{headers:{'Content-Type':'application/json'}, params: vm.stock})
+             .then(function(response){
+              vm.getStats(response);
+             })
+            .catch(function(error){
+               vm.getStats(error.response);
+             })
+            vm.showModal=false;
+            vm.edit=false;
+            vm.listStocks();
+        },
+        //creates a new stock
+        createStock: function(){
+          var vm = this,
+              uri = soatURI + 'create';
+           axios
+             .get(uri,{headers:{'Content-Type':'application/json'}, params: vm.stock})
+             .then(function(response){
+              vm.getStats(response);
+             })
+            .catch(function(error){
+               vm.getStats(error.response);
+             })
+            vm.showModal=false;
+            vm.add=false;
+            vm.listStocks();
+        },
+        //populates table of stocks returned from DB
+        listStocks: function(){
+          var uri = soatURI + 'stocks',
+              vm = this;
+          axios
+            .get(uri, {headers:{'Content-Type':'application.json'}})
+            .then(function(response){
+              vm.getStats(response);
+              vm.stockCount = response.data['data'].length;
+              for (const i in response.data['data']){
+                vm1.$set(vm.stocks, i, JSON.parse(response.data['data'][i]));
+              }
+            })
+            .catch(function(error){
+               vm.getStats(error.response);
+            })
+        },
+        //clears the stock object template used when performing any of the CRUD operations
+        resetStock: function(){
+          var vm = this;
+          for (i in vm.stock){
+            vm1.$set(vm.stock, i, 0);
+          }
+        },
+        //retrieves the HTTP response status info
+        getStats: function(response){
+          var vm = this;
+          vm.httpCode = response.status;
+          vm.httpStatus = response.statusText;
+        },
+      },
+      created() {
+        this.listStocks();       
+      },
+			});
+</script>
+	</body>
+</html>
