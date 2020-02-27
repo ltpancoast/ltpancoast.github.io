@@ -1,37 +1,27 @@
-## Welcome to GitHub Pages
+## Lee Pancoast
+#### CS499 
 
-You can use the [editor on GitHub](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Professional Self-assessment
+You can use the [editor on GitHub](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/README.md) to maintain and preview the 
+PSA goes here
 
-### Markdown
+### The artifact
+Base narrative preamble
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Code Review
+(Code review)[https://github.com/ltpancoast/ltpancoast.github.io/edit/master/CodeReview.mov] of selected artifact and proposed enhancements.
 
-```markdown
-Syntax highlighted code block
+### Enhancement One - Category: _Software Engineering and Design_
+NARRATIVE
+[source code](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/enhancedFinalREST.py)
 
-# Header 1
-## Header 2
-### Header 3
+### Enhancement Two - Category: _Algorithims and Data Structures_
+NARRATIVE
+[source code](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/enhancedFinalREST.py)
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
+### Enhancement Three - Category: _Databases_
+NARRATIVE
+[source code](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/index.html)
 
 **Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ltpancoast/ltpancoast.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
