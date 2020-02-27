@@ -1,5 +1,6 @@
-## Lee Pancoast
-#### CS499 
+# Lee Pancoast
+
+## CS499 - Computer Science Capstone
 
 
 ### Professional Self-assessment
@@ -12,7 +13,7 @@ Base narrative preamble
 ### Code Review
 (Code review)[https://github.com/ltpancoast/ltpancoast.github.io/edit/master/CodeReview.mov] of selected artifact and proposed enhancements.
 
-### Enhancement One - Category: _Software Engineering and Design_
+### Enhancement One - Category: _Software Design and Engineering_
 NARRATIVE
 [source code](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/enhancedFinalREST.py)
 
@@ -23,5 +24,3 @@ NARRATIVE
 ### Enhancement Three - Category: _Databases_
 NARRATIVE
 [source code](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/index.html)
-
-**Bold** and _Italic_ and `Code` text
