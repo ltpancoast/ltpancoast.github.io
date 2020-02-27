@@ -16,7 +16,7 @@ As part of my e-portfolio, I have included a code review and enhancements for a 
 Base narrative preamble
 
 ### Code Review
-[Code review](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/CodeReview.mov) of selected artifact and proposed enhancements.
+[Code review](https://youtu.be/IXFesAuqato) of selected artifact and proposed enhancements.
 
 ### Enhancement One - Category: _Software Design and Engineering_
 NARRATIVE
