@@ -20,12 +20,13 @@ Base narrative preamble
 
 ### Enhancement One - Category: _Software Design and Engineering_
 NARRATIVE
-[source code](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/enhancedFinalREST.py)
+[source code](source/api/enhancedFinalREST.py)
 
 ### Enhancement Two - Category: _Algorithims and Data Structures_
 NARRATIVE
-[source code](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/enhancedFinalREST.py)
+[source code](source/api/enhancedFinalREST.py)
 
 ### Enhancement Three - Category: _Databases_
 NARRATIVE
-[source code](https://github.com/ltpancoast/ltpancoast.github.io/edit/master/index.html) 
+[web interface](source/html/index.html) [web style](source/style/styles.css) 
+
